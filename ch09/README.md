@@ -7,20 +7,19 @@
 ```haskell
 module RecursiveContents (getRecursiveContents) where
 
-import Control.Monad (forM)
+import Control.Monad    (forM)
 import System.Directory (doesDirectoryExist, getDirectoryContents)
-import System.FilePath ((</>))
+import System.FilePath  ((</>))
 
 getRecursiveContents :: FilePath -> IO [FilePath]
-
 getRecursiveContents topdir = do
-  names <- getDirectoryContents topdir
-  let properNames = filter (`notElem` [".", ".."]) names
-  paths <- forM properNames $ \name -> do
-    let path = topdir </> name
-    isDirectory <- doesDirectoryExist path
+  names <- getDirectoryContents topdir                   -- retrieve all files and directories under topdir  monadic code
+  let properNames = filter (`notElem` [".", ".."]) names -- use let to bind plain value inside a do
+  paths <- forM properNames $ \name -> do                -- monadic code
+    let path = topdir </> name                           -- local plain value
+    isDirectory <- doesDirectoryExist path               -- monadic local value
     if isDirectory
       then getRecursiveContents path
-      else return [path]
+      else return [path]                                 -- use return to wrap values
   return (concat paths)
 ```
