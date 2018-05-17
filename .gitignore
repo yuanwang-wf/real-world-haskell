@@ -1,0 +1,5 @@
+.stack-work/
+real-world.cabal
+*~
+
+.DS_Store
